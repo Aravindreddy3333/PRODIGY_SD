@@ -1,0 +1,29 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+# Target URL
+URL = "http://books.toscrape.com/catalogue/page-{}.html"
+
+# Prepare CSV file
+csv_file = open('books.csv', 'w', newline='', encoding='utf-8')
+writer = csv.writer(csv_file)
+writer.writerow(['Title', 'Price', 'Rating'])
+
+# Scrape first 3 pages (can be increased)
+for page in range(1, 4):
+    print(f"Scraping page {page}...")
+    response = requests.get(URL.format(page))
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    books = soup.find_all('article', class_='product_pod')
+
+    for book in books:
+        title = book.h3.a['title']
+        price = book.find('p', class_='price_color').text[1:]  # Remove £ symbol
+        rating = book.p['class'][1]  # e.g., 'Three', 'Five'
+
+        writer.writerow([title, price, rating])
+
+csv_file.close()
+print("Scraping complete! Data saved to books.csv.")
