@@ -1,0 +1,37 @@
+def convert_temperature(value, unit):
+    if unit.lower() == "celsius":
+        fahrenheit = (value * 9/5) + 32
+        kelvin = value + 273.15
+        return {"Fahrenheit": fahrenheit, "Kelvin": kelvin}
+    elif unit.lower() == "fahrenheit":
+        celsius = (value - 32) * 5/9
+        kelvin = celsius + 273.15
+        return {"Celsius": celsius, "Kelvin": kelvin}
+    elif unit.lower() == "kelvin":
+        celsius = value - 273.15
+        fahrenheit = (celsius * 9/5) + 32
+        return {"Celsius": celsius, "Fahrenheit": fahrenheit}
+    else:
+        return None
+
+
+def main():
+    print("=== Temperature Converter ===")
+    try:
+        value = float(input("Enter the temperature value: "))
+        unit = input("Enter the original unit (Celsius, Fahrenheit, Kelvin): ").strip()
+
+        result = convert_temperature(value, unit)
+
+        if result:
+            print("\nConverted Temperatures:")
+            for key, val in result.items():
+                print(f"{key}: {val:.2f}")
+        else:
+            print("Invalid unit entered. Please use Celsius, Fahrenheit, or Kelvin.")
+    except ValueError:
+        print("Invalid input. Please enter a numeric temperature value.")
+
+
+if __name__ == "__main__":
+    main()
